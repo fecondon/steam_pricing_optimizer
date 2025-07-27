@@ -37,6 +37,7 @@ for page in range(1, 101):
 
         try:
             discount_block = row.find('div', class_='search_price_discount_combined')
+            discount_percent = int(discount_block.find('div', class_='discount_pct').text.strip().split('%')[0])
 
             prices = discount_block.find('div', class_='discount_prices').text.strip().split('$') if discount_block else ['']
             prices = [p for p in prices if p]
@@ -55,6 +56,7 @@ for page in range(1, 101):
             'release_date': release,
             'review': review,
             'original_price': original_price,
+            'discount_percent': discount_percent,
             'discounted_price': discounted_price,
             'tag_ids': tags
         })
