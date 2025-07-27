@@ -11,6 +11,9 @@ steam_df = steam_df.dropna(subset=['discounted_price'])
 # Fill missing original price with discounted price / discount_percent
 steam_df['original_price'] = steam_df['original_price'].fillna(steam_df['discounted_price'] / steam_df['discount_percent'])
 
+# Convert discount percent to positive percentage
+steam_df['discount_percent'] = steam_df['discount_percent'] * -1 / 100
+
 # Feature: Release year
 steam_df['release_year'] = steam_df['release_date'].str.extract(r'(\d{4})')
 steam_df['release_year'] = pd.to_numeric(steam_df['release_year'], errors='coerce')
