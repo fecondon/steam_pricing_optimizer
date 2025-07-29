@@ -16,14 +16,12 @@ df = pd.read_csv('steam_model_dataset.csv')
 np.random.seed(26)
 df['treatment'] = np.random.binomial(1, 0.5, len(df))
 
-# Apply pricing policy
-base_discount = 0.10
-treat_discount = 0.25
+# Apply additional 5% discount clipping to 90% off
+df['control_discount'] = df['discount_percent']
+df['treatment_discount'] = (df['control_discount'] + 0.05).clip(0, 0.9)
+df['effective_discount'] = np.where(df['treatment'] == 1, df['treatment_discount'], df['control_discount'])
 
 # Simulated effect on conversion probability
-df['effective_discount'] = df['treatment'].apply(
-    lambda x: treat_discount if x == 1 else base_discount
-)
 df['conversion_prob'] = 0.15 + 0.6 * df['effective_discount'] + 0.2 * df['is_new_release'] + 0.05 * np.random.rand(len(df))
 df['conversion_prob'] = df['conversion_prob'].clip(0, 1)
 df['converted'] = np.random.binomial(1, df['conversion_prob'])
@@ -50,11 +48,8 @@ plot_df = pd.DataFrame({
 df['uplift_score'] = uplift_scores
 
 # Visuals
-fig, ax = plt.subplots(1, 2, figsize=(12, 5))
 plot_gain(df=plot_df, treatment_col='treatment', outcome_col='outcome', treatment_effect_col='uplift_score')
 plot_qini(df=plot_df, treatment_col='treatment', outcome_col='outcome', treatment_effect_col='uplift_score')
-ax[0].set_title('Uplift Gain Curve')
-ax[1].set_title('Qini Curve')
 plt.tight_layout()
 plt.show()
 
