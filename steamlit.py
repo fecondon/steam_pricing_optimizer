@@ -3,10 +3,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from causalml.metrics import plot_gain, plot_qini
 
+
 # Load data
 @st.cache_data
 def load_data():
     return pd.read_csv('steam_ab_uplift_results.csv')
+
 
 df = load_data()
 
@@ -29,7 +31,7 @@ filtered_df = df[
     (df['uplift_score'] >= min_uplift)
 ]
 
-st.subheader('Filtered Game Samplme')
+st.subheader('Filtered Game Sample')
 st.dataframe(filtered_df.head(15))
 
 # Plots
