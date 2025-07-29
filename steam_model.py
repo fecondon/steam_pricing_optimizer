@@ -41,5 +41,5 @@ df_pred = steam_df.copy()
 df_pred['predicted_prob'] = model.predict_proba(steam_df[features])[:, 1]
 df_pred['expected_revenue'] = df_pred['discounted_price'] * df_pred['predicted_prob']
 
-# Save for next step 
+# Save for next step
 df_pred.to_csv('steam_simulated_revenue.csv', index=False)
