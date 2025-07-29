@@ -1,0 +1,16 @@
+{
+  "dataframe_split": {
+    "columns": [
+      "discounted_price",
+      "discount_percent",
+      "is_new_release"
+    ],
+    "data": [
+      [
+        2.09,
+        0.3,
+        0
+      ]
+    ]
+  }
+}

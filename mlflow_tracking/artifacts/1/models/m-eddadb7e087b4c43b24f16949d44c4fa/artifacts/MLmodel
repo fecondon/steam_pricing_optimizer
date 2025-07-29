@@ -1,0 +1,35 @@
+artifact_path: /Users/fecondon/Documents/DataScience/steam_pricing_optimizer/mlflow_tracking/artifacts/1/models/m-eddadb7e087b4c43b24f16949d44c4fa/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.1
+is_signature_from_type_hint: false
+mlflow_version: 3.1.4
+model_id: m-eddadb7e087b4c43b24f16949d44c4fa
+model_size_bytes: 131814
+model_uuid: m-eddadb7e087b4c43b24f16949d44c4fa
+prompts: null
+run_id: a6b05dea2ad34cb38fe85cd7c2a62f87
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "double", "name": "discounted_price", "required": true}, {"type":
+    "double", "name": "discount_percent", "required": true}, {"type": "long", "name":
+    "is_new_release", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-07-28 05:42:33.217981'
