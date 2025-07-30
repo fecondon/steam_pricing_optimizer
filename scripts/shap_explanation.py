@@ -24,7 +24,8 @@ shap_values = explainer(X)
 # SHAP force plot
 shap.initjs()
 sample = X.iloc[[0]]
-force_plot = shap.force_plot(explainer.expected_value[1], shap_values[0][:, 1], sample)
+
+force_plot = shap.force_plot(shap_values=explainer(sample).values[0][:, 1], base_value=shap_values.base_values[0][1], features=sample)
 shap.save_html('docs/force_plot_example.html', force_plot)
 
 # SHAP Uplift Simulation
@@ -36,7 +37,7 @@ treatment = 0.05
 df_control['discount_percent'] = df_control['discount_percent']
 df_treatment['discount_percent'] = (df_treatment['discount_percent'] + treatment).clip(0, 0.9)
 
-df_control['discounted_price'] = df_control['discount_price']
+df_control['discounted_price'] = df_control['discounted_price']
 df_treatment['discounted_price'] = df_treatment['discounted_price'] * (1 - treatment)
 
 X_control = df_control[features]
@@ -46,12 +47,12 @@ shap_control = explainer(X_control)
 shap_treatment = explainer(X_treatment)
 
 # Estimate Uplift SHAP
-shap_diff = shap_treatment.values[:, 1] - shap_control.values[:, 1]
+shap_diff = (shap_treatment.values[:, :, 1] - shap_control.values[:, :, 1]).sum(axis=1)
 df['shap_uplift'] = shap_diff
 
 # Plot uplift features
-avg_uplift_importance = np.abs(shap_treatment.values[:,1 ] - shap_control.values[:, 1]).mean(axis=0)
-shap.summary_plot(shap_treatment.values - shap_control.values, X, plot_type='bar', show=False)
+avg_uplift_importance = np.abs(shap_treatment.values[:, :, 1] - shap_control.values[:, :, 1]).mean(axis=0)
+shap.summary_plot(shap_treatment.values[:, :, 1] - shap_control.values[:, :, 1], X, plot_type='bar', show=False)
 plt.title('Uplift Feature Importance')
 plt.savefig('docs/shap_uplift.png')
 plt.close()
