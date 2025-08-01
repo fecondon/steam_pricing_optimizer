@@ -1,4 +1,5 @@
 import streamlit as st
+import requests
 import numpy as np
 import pandas as pd
 import shap
@@ -133,6 +134,30 @@ else:
     ax.set_title(f'Revenue Curve for: {selected_game}')
     ax.legend()
     st.pyplot(fig)
+
+# ----------------------------
+# LLM Recommendation
+# ----------------------------
+if st.button('Generate LLM Pricing Advice'):
+    payload = {
+        'title': game_row['title'],
+        'discount_percent': game_row['discount_percent'],
+        'conversion_prob': game_row['conversion_prob'],
+        'shap_uplift': game_row['shap_uplift'],
+        'is_new_release': game_row['is_new_release'],
+        'optimal_price': game_row['optimal_price'],
+        'optimal_revenue': game_row['optimal_revenue']
+    }
+
+    try:
+        response = requests.post('http://localhost:8000/recommend', json=payload, timeout=10)
+        if response.status_code == 200 and 'recommendation' in response.json():
+            st.success('LLM Suggestion: ' + response.json()['recommendation'])
+        else:
+            st.error('Failed to get LLM recommendation.')
+    
+    except Exception as e:
+        st.error(f'LLM API Error: {e}')
 
 # ----------------------------
 # Uplift Gain Curve

@@ -12,3 +12,4 @@ pydantic
 mlflow
 shap
 numpy
+python-dotenv

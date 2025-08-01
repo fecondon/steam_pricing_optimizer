@@ -2,6 +2,9 @@ from fastapi import FastAPI, Request
 from pydantic import BaseModel
 import openai
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
