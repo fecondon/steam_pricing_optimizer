@@ -13,3 +13,4 @@ mlflow
 shap
 numpy
 python-dotenv
+huggingface_hub

@@ -1,14 +1,22 @@
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
-import openai
 import os
 from dotenv import load_dotenv
+from huggingface_hub import InferenceClient
+import json
 
 load_dotenv()
 
 app = FastAPI()
 
-openai.api_key = os.getenv('OPENAI_API_KEY')
+HF_API_KEY = os.getenv('HF_API_KEY')
+HF_MODEL_NAME = os.getenv('HF_MODEL_NAME')
+
+client = InferenceClient(
+    model=HF_MODEL_NAME,
+    provider='featherless-ai',
+    api_key=HF_API_KEY,
+)
 
 
 class GameFeatures(BaseModel):
@@ -37,8 +45,7 @@ def recommend_pricing(game: GameFeatures):
     """
 
     try:
-        response = openai.ChatCompletion.create(
-            model='gpt-4-turbo',
+        response = client.chat_completion(
             messages=[
                 {'role': 'system', 'content': 'You generate pricing strategy summaries for a dashboard'},
                 {'role': 'user', 'content': prompt}

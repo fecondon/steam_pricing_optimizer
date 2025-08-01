@@ -140,13 +140,13 @@ else:
 # ----------------------------
 if st.button('Generate LLM Pricing Advice'):
     payload = {
-        'title': game_row['title'],
-        'discount_percent': game_row['discount_percent'],
-        'conversion_prob': game_row['conversion_prob'],
-        'shap_uplift': game_row['shap_uplift'],
-        'is_new_release': game_row['is_new_release'],
-        'optimal_price': game_row['optimal_price'],
-        'optimal_revenue': game_row['optimal_revenue']
+        'title': str(game_row['title']),
+        'discount_percent': float(game_row['discount_percent']),
+        'conversion_prob': float(game_row['conversion_prob']),
+        'shap_uplift': float(game_row['shap_uplift']),
+        'is_new_release': int(game_row['is_new_release']),
+        'optimal_price': float(optimal_price),
+        'optimal_revenue': float(optimal_revenue)
     }
 
     try:
