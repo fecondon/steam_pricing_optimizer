@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import APIRouter, Request
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
@@ -7,7 +7,7 @@ import json
 
 load_dotenv()
 
-app = FastAPI()
+router = APIRouter()
 
 HF_API_KEY = os.getenv('HF_API_KEY')
 HF_MODEL_NAME = os.getenv('HF_MODEL_NAME')
@@ -29,7 +29,7 @@ class GameFeatures(BaseModel):
     optimal_revenue: float
 
 
-@app.post('/recommend')
+@router.post('/recommend')
 def recommend_pricing(game: GameFeatures):
     prompt = f"""
     You are a pricing optimization expert for video games.

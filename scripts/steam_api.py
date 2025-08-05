@@ -1,9 +1,11 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import mlflow.sklearn
 import pandas as pd
 import numpy as np
 import uvicorn
+from scripts import llm_advisor, steam_games
 
 # Load the model from MLFlow
 mlflow.set_tracking_uri('http://127.0.0.1:5000')
@@ -12,6 +14,18 @@ model = mlflow.sklearn.load_model(logged_model_uri)
 
 # Define app
 app = FastAPI(title='Steam Game Price Optimizer API')
+
+app.include_router(steam_games.router)
+app.include_router(llm_advisor.router)
+
+# Allow React frontend to call API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 
 # Define input schema
