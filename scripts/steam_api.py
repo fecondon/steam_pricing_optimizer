@@ -10,13 +10,19 @@ from scripts import llm_advisor, steam_games
 # Load the model from MLFlow
 mlflow.set_tracking_uri('http://127.0.0.1:5000')
 logged_model_uri = 'runs:/f980da061f4a43a2b0f084f7c2515505/model'
-model = mlflow.sklearn.load_model(logged_model_uri)
+try:
+    model = mlflow.sklearn.load_model(logged_model_uri)
+except Exception as e:
+    print('Failed to load model from MLFlow: ', e)
+    model = None
 
 # Define app
 app = FastAPI(title='Steam Game Price Optimizer API')
 
 app.include_router(steam_games.router)
+print('Games router loaded.')
 app.include_router(llm_advisor.router)
+print('LLM router loaded.')
 
 # Allow React frontend to call API
 app.add_middleware(
