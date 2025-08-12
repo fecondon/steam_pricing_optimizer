@@ -31,6 +31,7 @@ class GameFeatures(BaseModel):
 
 @router.post('/recommend')
 def recommend_pricing(game: GameFeatures):
+    print(f'Executing /recommend endpoint for {game}')
     prompt = f"""
     You are a pricing optimization expert for video games.
     Based on the following features, provide a 2-3 sentence pricing recommendation:
@@ -41,7 +42,7 @@ def recommend_pricing(game: GameFeatures):
     Uplift from +5% Discount (proxy): {game.shap_uplift}
     Optimal Price: ${game.optimal_price}
     Optimal Revenue: ${game.optimal_revenue}
-    New Release: {'Yes' if game.is_new_release else 'No'} 
+    New Release: {'Yes' if game.is_new_release else 'No'}
     """
 
     try:
@@ -54,7 +55,9 @@ def recommend_pricing(game: GameFeatures):
             max_tokens=100
         )
         advice = response.choices[0].message.content.strip()
+        print(advice)
         return {'recommendation': advice}
 
     except Exception as e:
+        print(f'Failed to get recommendation: {e}')
         return {'error': str(e)}
